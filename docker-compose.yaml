@@ -1,0 +1,7 @@
+version: "3"
+services:
+  hiberus-test:
+    container_name: hiberus-test
+    build: .
+    ports:
+      - "3000:3000"
