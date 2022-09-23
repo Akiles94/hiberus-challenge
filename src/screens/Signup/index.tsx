@@ -1,14 +1,14 @@
+import { FormikProvider, useFormik } from 'formik';
 import styled from 'styled-components';
-import { useFormik, FormikProvider } from 'formik';
-import * as Yup from 'yup';
-import { Audio } from 'react-loader-spinner';
-import Input from '../../components/Input';
 import Button from '../../components/Button';
-import useWindowSize from '../../hooks/useWindowSize';
+import Input from '../../components/Input';
 import DefaultWrapper from '../../components/DefaultWrapper';
 import StyledCard from '../../components/StyledCard';
-import { LoginRequest, LoginResponse } from '../../dto';
-import useLogin from '../../hooks/api/useLogin';
+import useWindowSize from '../../hooks/useWindowSize';
+import * as Yup from 'yup';
+import useSignup from '../../hooks/api/useSignup';
+import { SignUpRequest } from '../../dto';
+import { Audio } from 'react-loader-spinner';
 
 const StyledImage = styled.img`
   width: 100px;
@@ -18,16 +18,20 @@ type Props = {
   setSwitch: (param: boolean) => void;
 };
 
-const Login = ({ setSwitch }: Props) => {
+export default function SignUp({ setSwitch }: Props) {
   const windowSize = useWindowSize();
-  const { mutateAsync: login, isLoading } = useLogin();
+  const { mutateAsync: signup, isLoading } = useSignup();
   const initialValues = {
+    name: '',
+    surname: '',
     email: '',
     password: '',
   };
   const formik = useFormik({
     initialValues,
     validationSchema: Yup.object({
+      name: Yup.string().required(),
+      surname: Yup.string().required(),
       email: Yup.string().email().required('Required'),
       password: Yup.string()
         .min(5, 'Must be 5 characters or more')
@@ -35,8 +39,8 @@ const Login = ({ setSwitch }: Props) => {
         .required('Required'),
     }),
     onSubmit: async (values: typeof initialValues) => {
-      const loginResponse: LoginResponse = await login(values as LoginRequest);
-      console.log(loginResponse);
+      const signupResponse = await signup(values as SignUpRequest);
+      console.log(signupResponse);
     },
   });
   return (
@@ -47,16 +51,16 @@ const Login = ({ setSwitch }: Props) => {
         <FormikProvider value={formik}>
           <StyledCard>
             <StyledImage src='./logo192.png' />
-            <h1>Login</h1>
+            <h1>Registro</h1>
+            <Input name='name' placeholder='Nombres' />
+            <Input name='surname' placeholder='Apellidos' />
             <Input name='email' type='email' placeholder='Email' />
             <Input name='password' type='password' placeholder='Contraseña' />
-            <Button type='submit' onClick={() => formik.submitForm()} label='Ingresar' />
-            <Button onClick={() => setSwitch(false)} label='Registrarme' />
+            <Button type='submit' onClick={() => formik.submitForm()} label='Enviar' />
+            <Button onClick={() => setSwitch(true)} label='Regresar' />
           </StyledCard>
         </FormikProvider>
       )}
     </DefaultWrapper>
   );
-};
-
-export default Login;
+}
