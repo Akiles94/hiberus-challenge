@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-const DefaultWrapper = styled.div<{ height: number }>`
+const DefaultWrapper = styled.div<{ height?: number }>`
   display: flex;
   width: 100%;
-  height: ${({ height }) => height}px;
+  height: ${({ height }) => (height ? `${height}px` : '')};
   background-color: ${({ theme: { colors } }) => colors.primary};
   flex-direction: column;
   justify-content: center;

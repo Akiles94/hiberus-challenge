@@ -9,6 +9,7 @@ import DefaultWrapper from '../../components/DefaultWrapper';
 import StyledCard from '../../components/StyledCard';
 import { LoginRequest, LoginResponse } from '../../dto';
 import useLogin from '../../hooks/api/useLogin';
+import { setToken } from '../../utils/authStore';
 
 const StyledImage = styled.img`
   width: 100px;
@@ -36,7 +37,7 @@ const Login = ({ setSwitch }: Props) => {
     }),
     onSubmit: async (values: typeof initialValues) => {
       const loginResponse: LoginResponse = await login(values as LoginRequest);
-      console.log(loginResponse);
+      await setToken(loginResponse.accessToken);
     },
   });
   return (

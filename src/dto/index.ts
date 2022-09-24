@@ -1,3 +1,5 @@
+import { User } from '../models';
+
 export type LoginRequest = {
   email: string;
   password: string;
@@ -14,4 +16,9 @@ export type SignUpRequest = {
   surname: string;
   email: string;
   password: string;
+};
+
+export type GetUsersResponse = {
+  count: number;
+  items: User[];
 };
