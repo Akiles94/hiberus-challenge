@@ -1,24 +1,55 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Auth from '../screens/Auth';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Login } from '../screens';
+import SignUp from '../screens/Signup';
+import UpdateUser from '../screens/UpdateUser';
 import Users from '../screens/Users';
 import { getToken } from '../utils/authStore';
 
-const token = getToken();
+export default function Router() {
+  const [isToken, setIsToken] = useState(false);
 
-const router = createBrowserRouter(
-  token
-    ? [
-        {
-          path: '/',
-          element: <Users />,
-        },
-      ]
-    : [
-        {
-          path: '/',
-          element: <Auth />,
-        },
-      ]
-);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    window.addEventListener('storage', () => {
+      const token = getToken();
+      if (token) {
+        setIsToken(true);
+      } else {
+        setIsToken(false);
+      }
+    });
+  });
 
-export default router;
+  return (
+    <BrowserRouter>
+      <Switch>
+        {isToken ? (
+          <>
+            <Route path='/'>
+              <Redirect to='/users' />
+            </Route>
+            <Route path='/users'>
+              <Users />
+            </Route>
+            <Route path='/updateUser'>
+              <UpdateUser />
+            </Route>
+          </>
+        ) : (
+          <>
+            <Route path='/'>
+              <Redirect to='/login' />
+            </Route>
+            <Route path='/login'>
+              <Login />
+            </Route>
+            <Route path='/signup'>
+              <SignUp />
+            </Route>
+          </>
+        )}
+      </Switch>
+    </BrowserRouter>
+  );
+}

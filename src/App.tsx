@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import router from './routes';
+import Router from './routes';
 import GlobalStyle from './utils/globalStyle';
 import { defaultTheme } from './utils/theme';
 
@@ -12,7 +11,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
-        <RouterProvider router={router} />
+        <Router />
       </ThemeProvider>
     </QueryClientProvider>
   );

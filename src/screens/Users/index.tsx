@@ -1,4 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
+import { Audio } from 'react-loader-spinner';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/Button';
 import DefaultWrapper from '../../components/DefaultWrapper';
@@ -22,53 +24,59 @@ const StyledActions = styled.div`
   gap: 5px;
 `;
 
-const columnHelper = createColumnHelper<User>();
-
-const columns = [
-  columnHelper.accessor(row => row.name, {
-    id: 'name',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Nombres</span>,
-  }),
-  columnHelper.accessor(row => row.surname, {
-    id: 'surname',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Apellidos</span>,
-  }),
-  columnHelper.accessor(row => row.email, {
-    id: 'email',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Email</span>,
-  }),
-  columnHelper.display({
-    id: 'actions',
-    cell: () => (
-      <StyledActions>
-        <StyledAction label='Ver' onClick={() => {}} />
-        <StyledAction label='Editar' onClick={() => {}} />
-        <StyledAction label='Eliminar' onClick={() => {}} />
-      </StyledActions>
-    ),
-    header: () => <span>Acciones</span>,
-  }),
-];
-
 export default function Users() {
-  const { data } = useGetUsers();
+  const { data, isLoading } = useGetUsers();
   const users = data?.items;
-  console.log(users);
+  const history = useHistory();
+
+  const columnHelper = createColumnHelper<User>();
+
+  const columns = [
+    columnHelper.accessor(row => row.name, {
+      id: 'name',
+      cell: info => <i>{info.getValue()}</i>,
+      header: () => <span>Nombres</span>,
+    }),
+    columnHelper.accessor(row => row.surname, {
+      id: 'surname',
+      cell: info => <i>{info.getValue()}</i>,
+      header: () => <span>Apellidos</span>,
+    }),
+    columnHelper.accessor(row => row.email, {
+      id: 'email',
+      cell: info => <i>{info.getValue()}</i>,
+      header: () => <span>Email</span>,
+    }),
+    columnHelper.display(row => row.id, {
+      id: 'actions',
+      cell: () => (
+        <StyledActions>
+          <StyledAction label='Editar' onClick={() => history.push('/updateUser', info.getValue())} />
+          <StyledAction label='Eliminar' onClick={() => {}} />
+        </StyledActions>
+      ),
+      header: () => <span>Acciones</span>,
+    }),
+  ];
 
   const handleLogout = async () => {
     await deleteToken();
+    history.replace('/login');
   };
 
   return (
     <DefaultWrapper>
-      <StyledButton label='Salir' onClick={handleLogout} />
-      <StyledCard>
-        <h1>Usuarios</h1>
-        {users && <Table tableData={users || []} columns={columns} />}
-      </StyledCard>
+      {isLoading ? (
+        <Audio height='80' width='80' color='gray' ariaLabel='three-dots-loading' />
+      ) : (
+        <>
+          <StyledButton label='Salir' onClick={handleLogout} />
+          <StyledCard>
+            <h1>Usuarios</h1>
+            {users && <Table tableData={users || []} columns={columns} />}
+          </StyledCard>
+        </>
+      )}
     </DefaultWrapper>
   );
 }
