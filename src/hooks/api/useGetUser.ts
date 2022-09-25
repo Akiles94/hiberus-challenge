@@ -6,9 +6,11 @@ import { User } from '../../models';
 export const GET_USER = 'GET_USER';
 
 export const getUser = async (id: string, headers?: AxiosRequestHeaders) => {
+  console.log(id);
   const { data: users } = await api.get<User>(`/users/${id}`, {
     headers: headers?.cookie ? { cookie: headers?.cookie } : undefined,
   });
+  console.log(users);
   return users;
 };
 

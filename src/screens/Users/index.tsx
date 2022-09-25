@@ -47,11 +47,11 @@ export default function Users() {
       cell: info => <i>{info.getValue()}</i>,
       header: () => <span>Email</span>,
     }),
-    columnHelper.display(row => row.id, {
+    columnHelper.accessor(row => row.id, {
       id: 'actions',
-      cell: () => (
+      cell: info => (
         <StyledActions>
-          <StyledAction label='Editar' onClick={() => history.push('/updateUser', info.getValue())} />
+          <StyledAction label='Editar' onClick={() => history.push('updateUser', { id: info.getValue() })} />
           <StyledAction label='Eliminar' onClick={() => {}} />
         </StyledActions>
       ),
@@ -73,7 +73,7 @@ export default function Users() {
           <StyledButton label='Salir' onClick={handleLogout} />
           <StyledCard>
             <h1>Usuarios</h1>
-            {users && <Table tableData={users || []} columns={columns} />}
+            {users && <Table tableData={users} columns={columns} />}
           </StyledCard>
         </>
       )}

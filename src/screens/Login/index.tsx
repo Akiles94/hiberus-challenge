@@ -45,7 +45,7 @@ const Login = () => {
             <Input name='email' type='email' placeholder='Email' />
             <Input name='password' type='password' placeholder='Contraseña' />
             <Button type='submit' onClick={() => formik.submitForm()} label='Ingresar' />
-            <Button onClick={() => history.push({ pathname: 'signup' })} label='Registrarme' />
+            <Button onClick={() => history.push('signup')} label='Registrarme' />
           </StyledCard>
         </FormikProvider>
       )}

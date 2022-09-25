@@ -36,7 +36,7 @@ export default function UserForm({
     <FormikProvider value={formik}>
       <StyledCard>
         <StyledImage src='./logo192.png' />
-        <h1>Registro</h1>
+        <h1>{formik.initialValues.id ? 'Editar Usuario' : 'Registro'}</h1>
         <Input name='name' placeholder='Nombres' />
         <Input name='surname' placeholder='Apellidos' />
         <Input name='email' type='email' placeholder='Email' />

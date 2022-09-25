@@ -32,7 +32,7 @@ export default function Router() {
             <Route path='/users'>
               <Users />
             </Route>
-            <Route path='/updateUser'>
+            <Route path='/updateUser/:id'>
               <UpdateUser />
             </Route>
           </>
