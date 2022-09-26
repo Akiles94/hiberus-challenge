@@ -22,9 +22,7 @@ const StyledHeaderCell = styled.th`
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Table({ tableData, columns }: { tableData: unknown[]; columns: any[] }) {
-  const [data] = React.useState(() => [...tableData]);
-
-  const rerender = React.useReducer(() => ({}), {})[1];
+  const [data, setData] = React.useState(() => [...tableData]);
   const table = useReactTable({
     data,
     columns,
@@ -32,7 +30,7 @@ export default function Table({ tableData, columns }: { tableData: unknown[]; co
   });
 
   React.useEffect(() => {
-    rerender();
+    setData(tableData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
 

@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import DefaultWrapper from '../../components/DefaultWrapper';
 import StyledCard from '../../components/StyledCard';
 import Table from '../../components/Table';
+import useDeleteUser from '../../hooks/api/useDeleteUser';
 import useGetUsers from '../../hooks/api/useGetUsers';
 import { User } from '../../models';
 import { deleteToken } from '../../utils/authStore';
@@ -25,11 +26,16 @@ const StyledActions = styled.div`
 `;
 
 export default function Users() {
-  const { data, isLoading } = useGetUsers();
-  const users = data?.items;
+  const { data, isLoading, refetch } = useGetUsers();
   const history = useHistory();
+  const { mutateAsync: deleteUser } = useDeleteUser();
 
   const columnHelper = createColumnHelper<User>();
+
+  const handleDeleteUser = async (id: string | number) => {
+    await deleteUser(id);
+    await refetch();
+  };
 
   const columns = [
     columnHelper.accessor(row => row.name, {
@@ -51,8 +57,8 @@ export default function Users() {
       id: 'actions',
       cell: info => (
         <StyledActions>
-          <StyledAction label='Editar' onClick={() => history.push('updateUser', { id: info.getValue() })} />
-          <StyledAction label='Eliminar' onClick={() => {}} />
+          <StyledAction label='Editar' onClick={() => history.push({ pathname: `/updateUser/${info.getValue()}` })} />
+          <StyledAction label='Eliminar' onClick={() => handleDeleteUser(info.getValue() || 0)} />
         </StyledActions>
       ),
       header: () => <span>Acciones</span>,
@@ -73,7 +79,7 @@ export default function Users() {
           <StyledButton label='Salir' onClick={handleLogout} />
           <StyledCard>
             <h1>Usuarios</h1>
-            {users && <Table tableData={users} columns={columns} />}
+            {data && <Table tableData={data.items} columns={columns} />}
           </StyledCard>
         </>
       )}

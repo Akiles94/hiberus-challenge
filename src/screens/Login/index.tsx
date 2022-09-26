@@ -10,7 +10,7 @@ import { LoginRequest, LoginResponse } from '../../dto';
 import useLogin from '../../hooks/api/useLogin';
 import { setToken } from '../../utils/authStore';
 import { useHistory } from 'react-router-dom';
-import { userValidator } from '../../validators/users';
+import { loginValidator } from '../../validators/users';
 
 const StyledImage = styled.img`
   width: 100px;
@@ -26,7 +26,7 @@ const Login = () => {
   };
   const formik = useFormik({
     initialValues,
-    validationSchema: userValidator,
+    validationSchema: loginValidator,
     onSubmit: async (values: typeof initialValues) => {
       const loginResponse: LoginResponse = await login(values as LoginRequest);
       await setToken(loginResponse.accessToken);

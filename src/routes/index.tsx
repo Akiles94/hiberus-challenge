@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { Login } from '../screens';
-import SignUp from '../screens/Signup';
-import UpdateUser from '../screens/UpdateUser';
-import Users from '../screens/Users';
+import { Login, SignUp, UpdateUser, Users } from '../screens';
 import { getToken } from '../utils/authStore';
 
 export default function Router() {
@@ -29,24 +26,16 @@ export default function Router() {
             <Route path='/'>
               <Redirect to='/users' />
             </Route>
-            <Route path='/users'>
-              <Users />
-            </Route>
-            <Route path='/updateUser/:id'>
-              <UpdateUser />
-            </Route>
+            <Route path='/users' component={Users} />
+            <Route path='/updateUser/:id' component={UpdateUser} />
           </>
         ) : (
           <>
             <Route path='/'>
               <Redirect to='/login' />
             </Route>
-            <Route path='/login'>
-              <Login />
-            </Route>
-            <Route path='/signup'>
-              <SignUp />
-            </Route>
+            <Route path='/login' component={Login} />
+            <Route path='/signup' component={SignUp} />
           </>
         )}
       </Switch>

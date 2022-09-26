@@ -1,6 +1,7 @@
 import { useField } from 'formik';
 import { ComponentPropsWithRef } from 'react';
 import styled from 'styled-components';
+import { getError } from '../../utils/form';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -10,9 +11,9 @@ const StyledWrapper = styled.div`
   position: relative;
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{ error?: string }>`
   border-radius: 5px;
-  border: 0.13em solid ${({ theme: { colors } }) => colors.secondary};
+  border: 0.13em solid ${({ theme: { colors }, error }) => (error ? colors.error : colors.secondary)};
   padding: 5px 10px;
   ::placeholder {
     color: lightGray;
@@ -32,12 +33,13 @@ type Props = ComponentPropsWithRef<'input'> & {
   as?: 'input' | 'textarea';
 };
 export default function Input({ label, className, ...props }: Props) {
-  const [field] = useField(props.name || '');
+  const [field, meta] = useField(props.name || '');
+  const error = meta.touched ? getError(meta.error) : undefined;
 
   return (
     <StyledWrapper className={className}>
       {label && <StyledLabel>{label}</StyledLabel>}
-      <StyledInput autoComplete={props.autoComplete || 'off'} {...field} {...props} />
+      <StyledInput error={error} autoComplete={props.autoComplete || 'off'} {...field} {...props} />
     </StyledWrapper>
   );
 }

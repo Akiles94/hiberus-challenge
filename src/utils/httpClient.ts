@@ -31,7 +31,6 @@ api.interceptors.response.use(
     let newMessage = message;
 
     newMessage = newMessage || '¡Oh no! Ocurrió un error inesperado.';
-
     toast.error(newMessage);
 
     const newError = new Error(newMessage) as AxiosError;
