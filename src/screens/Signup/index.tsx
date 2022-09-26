@@ -4,10 +4,12 @@ import useSignup from '../../hooks/api/useSignup';
 import { Audio } from 'react-loader-spinner';
 import UserForm from '../UserForm';
 import { User } from '../../models';
+import { useHistory } from 'react-router-dom';
 
 export default function SignUp() {
   const windowSize = useWindowSize();
   const { mutateAsync: signup, isLoading } = useSignup();
+  const history = useHistory();
   const initialValues = {
     name: '',
     surname: '',
@@ -17,6 +19,7 @@ export default function SignUp() {
 
   const handleSubmit = async (values: User) => {
     await signup(values);
+    history.push('/login');
   };
   return (
     <DefaultWrapper height={windowSize.height}>
